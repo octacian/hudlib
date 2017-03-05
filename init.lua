@@ -26,6 +26,13 @@ minetest.register_chatcommand("hudplus", {
   end,
 })
 
+--------------------
+-- LOAD RESOURCES --
+--------------------
+
+-- Load API
+dofile(modpath.."/api.lua")
+
 -------------------
 ----- MODULES -----
 -------------------
