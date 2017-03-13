@@ -24,17 +24,27 @@ end
 
 -- [register] Globalstep
 minetest.register_globalstep(function(dtime)
+  -- Queue
   for _, i in pairs(queue) do
   	if not times[_] then
   		times[_] = 1
   	end
-  	
+    
 		times[_] = times[_] + dtime
 		if times[_] >= i.time then
 			i.func()
 			hudplus.after_remove(_)
 			times[_] = nil
 		end
+  end
+
+  -- on_step Callback
+  for player, huds in pairs(huds) do
+    for _, hud in pairs(huds) do
+      if hud.on_step then
+        hud.on_step(minetest.get_player_by_name(player), dtime)
+      end
+    end
   end
 end)
 
@@ -81,11 +91,15 @@ function hudplus.hud_add(player, hud_name, def)
         show = false,
       }
     else
+      local on_step = def.on_step
+      def.on_step = nil
+
       local id = player:hud_add(def)
       huds[name][hud_name] = {
-        id   = id,
-        def  = def,
-        show = true,
+        id      = id,
+        def     = def,
+        show    = true,
+        on_step = on_step,
       }
 
       if def.hide_after then
@@ -98,7 +112,7 @@ function hudplus.hud_add(player, hud_name, def)
         end)
       end
 
-      return id
+      return true
     end
   end
 end
