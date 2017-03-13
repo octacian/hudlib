@@ -4,7 +4,7 @@ Modules allow HUD Plus to be divided into different parts which can be enabled o
 ## Managing Modules
 Modules listed in the configuration file are automatically loaded at startup unless specifically disabled. For the purpose of listing and/or disabling mods, we've introduced the `modules.conf` file.
 
-Each module is listed on a new line, as if setting a variable. A module can be disabled or enabled by setting this variable to `true` or `false`. If a module is not listed here, or is set to `false` (disabled), it will not be automatically loaded.
+Each module is listed on a new line, as if setting a variable. A module can be disabled or enabled by setting this variable to `true` or `false`. If a module is set to `false` (disabled), it will not be automatically loaded. __Note:__ modules will be loaded anyway if they are not found in the configuration file at all.
 
 __Example:__
 ```lua

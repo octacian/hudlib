@@ -75,8 +75,9 @@ function hudplus.require_module(name)
   end
 end
 
-for name,enabled in pairs(settings) do
-  if enabled ~= false then
-    hudplus.load_module(name)
+local modules_list = minetest.get_dir_list(modpath.."/modules", true)
+for _, d in ipairs(modules_list) do
+  if settings[d] ~= "false" then
+    hudplus.load_module(d)
   end
 end
