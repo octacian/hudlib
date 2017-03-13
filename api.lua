@@ -7,7 +7,7 @@ local times = {}
 -- [function] After
 function hudplus.after(name, time, func)
   queue[name] = { time = time, func = func, }
-  
+
   -- Update times table
   if times[name] then
   	times[name] = 1
@@ -29,7 +29,7 @@ minetest.register_globalstep(function(dtime)
   	if not times[_] then
   		times[_] = 1
   	end
-    
+
 		times[_] = times[_] + dtime
 		if times[_] >= i.time then
 			i.func()
@@ -205,5 +205,34 @@ function hudplus.hud_show(player, hud_name)
 
       return true
     end
+  end
+end
+
+-- [function] Register HUD
+function hudplus.register(hud_name, def)
+  local when = def.show_on or "join"
+  if when == "join" then
+    minetest.register_on_joinplayer(function(player)
+      hudplus.hud_add(player, hud_name, def)
+
+      if def.on_add then
+        def.on_add(player)
+      end
+    end)
+  elseif when == "now" then
+    for _, player in pairs(minetest.get_connected_players()) do
+      if hudplus.hud_add(player, hud_name, def) then
+        if def.on_add then
+          def.on_add(player)
+        end
+      end
+    end
+  end
+end
+
+-- [function] Unregister HUD
+function hudplus.unregister(hud_name)
+  for player, huds in pairs(huds) do
+    hudplus.hud_remove(minetest.get_player_by_name(player), hud_name)
   end
 end

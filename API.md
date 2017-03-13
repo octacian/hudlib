@@ -40,3 +40,13 @@ Non-destructively hides the HUD from the player. `nil` will be returned if the H
 __Usage:__ `hudplus.hud_show(<player (userdata or string)>, <hud name (string)>)`
 
 Shows a previously hidden HUD to the player. `nil` will be returned if the HUD is already visible or does not exist. Can be hidden with `hud_hide`.
+
+#### `register`
+__Usage:__ `hudplus.register(<hud name (string)>, <definition (table)>)`
+
+Registers an HUD to be shown to all players. Definition and name follow same standards as with `hud_add`. __Note:__ HUDs registered with this API function are only shown to a player when they join the game. If you wish to show an HUD to all players mid-game, set `show_on` to `now`.
+
+#### `unregister`
+__Usage:__ `hudplus.unregister(<hud name(string)>)`
+
+Removes and HUD from all players at once. Useful if you need to temporarily disable an HUD for everybody (e.g. changing everyone's gamemode to creative).
