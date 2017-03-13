@@ -11,5 +11,8 @@ This mod aims to create a better player HUD at the same time providing an extens
 ### Planned
 - Tool Status
 - Hunger Statbar
-- Armor Startbar
-- Sprinting (?)
+- Armor Statbar
+- Clock to display time
+- API to allow easy registration of features that can be changed per-player, per-HUD with a single chatcommand
+- API to register HUDs displayed to all players
+- Statbar API
