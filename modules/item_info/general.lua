@@ -32,12 +32,15 @@ minetest.register_globalstep(function(dtime)
       })
     end
 
-    local show = hudplus.hud_get(player, "item_info", "show")
-    if show == false then
-      if wield[pname] ~= windex then
-        hudplus.hud_show(player, "item_info")
-      end
-    end
+		if wield[pname] ~= windex then
+			local show = hudplus.hud_get(player, "item_info", "show")
+		  if show == false then
+		    hudplus.hud_show(player, "item_info")
+		  end
+		  
+		  -- Update timer
+		  hudplus.after("hide_item_info", after, function() hudplus.hud_hide(player, "item_info") end)
+		end
 
     wield[pname] = windex
   end

@@ -1,6 +1,42 @@
 -- hudplus/api.lua
 
-local huds = {}
+local huds  = {}
+local queue = {}
+local times = {}
+
+-- [function] After
+function hudplus.after(name, time, func)
+  queue[name] = { time = time, func = func, }
+  
+  -- Update times table
+  if times[name] then
+  	times[name] = 1
+  end
+end
+
+-- [function] Destroy after
+function hudplus.after_remove(name)
+  if queue[name] then
+  	queue[name] = nil
+  	return true
+  end
+end
+
+-- [register] Globalstep
+minetest.register_globalstep(function(dtime)
+  for _, i in pairs(queue) do
+  	if not times[_] then
+  		times[_] = 1
+  	end
+  	
+		times[_] = times[_] + dtime
+		if times[_] >= i.time then
+			i.func()
+			hudplus.after_remove(_)
+			times[_] = nil
+		end
+  end
+end)
 
 -- [function] Get HUD
 function hudplus.hud_get(name, hud_name, key)
@@ -53,7 +89,7 @@ function hudplus.hud_add(player, hud_name, def)
       }
 
       if def.hide_after then
-        minetest.after(def.hide_after, function()
+        hudplus.after("hide_"..hud_name, def.hide_after, function()
           hudplus.hud_hide(player, hud_name)
 
           if def.on_hide then
@@ -140,7 +176,7 @@ function hudplus.hud_show(player, hud_name)
 
       local def = hud.def
       if def.hide_after then
-        minetest.after(def.hide_after, function()
+        hudplus.after("hide_"..hud_name, def.hide_after, function()
           hudplus.hud_hide(player, hud_name)
 
           if def.on_hide then
