@@ -2,9 +2,9 @@ This mod aims to create a better player HUD at the same time providing an extens
 
 Features
 - Item description and itemstring is displayed when selected in hotbar
+- Displays tool information in bottom-left when selected in hotbar
 
 Planned
-- Tool Status
 - Hunger Statbar
 - Armor Statbar
 - Clock to display time
