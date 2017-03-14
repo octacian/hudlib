@@ -56,7 +56,7 @@ function hudplus.hud_get(name, hud_name, key)
   end
 
   if not huds[name] then
-    huds[name] = {}
+    return
   end
 
   local hud = huds[name][hud_name]
@@ -66,6 +66,23 @@ function hudplus.hud_get(name, hud_name, key)
     else
       return hud
     end
+  end
+end
+
+-- [function] Set HUD Value
+function hudplus.hud_set(name, hud_name, key, value)
+  assert(name and hud_name and key, "hudplus.hud_set: Invalid parameters")
+  if type(name) == "userdata" then
+    name = name:get_player_name()
+  end
+
+  if not huds[name] then
+    return
+  end
+
+  if huds[name][hud_name] then
+    huds[name][hud_name][key] = value
+    return true
   end
 end
 
@@ -146,6 +163,10 @@ function hudplus.hud_change(player, hud_name, key, val)
   local hud  = hudplus.hud_get(name, hud_name)
   if hud then
     player:hud_change(hud.id, key, val)
+
+    -- Update def in hud list
+    hud.def[key] = val
+    hudplus.hud_set(player, hud_name, "def", hud.def)
     return true
   end
 end
@@ -162,7 +183,7 @@ function hudplus.hud_hide(player, hud_name)
   if hud then
     if hud.show == true then
       player:hud_remove(hud.id)
-      hud.show = false
+      hudplus.hud_set(player, hud_name, "show", false)
 
       local def = hud.def
       if def.on_hide then
@@ -185,8 +206,8 @@ function hudplus.hud_show(player, hud_name)
   local hud  = hudplus.hud_get(name, hud_name)
   if hud then
     if hud.show == false then
-      hud.id = player:hud_add(hud.def)
-      hud.show = true
+      hudplus.hud_set(player, hud_name, "id", player:hud_add(hud.def))
+      hudplus.hud_set(player, hud_name, "show", true)
 
       local def = hud.def
       if def.hide_after then

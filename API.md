@@ -16,6 +16,11 @@ __Usage:__ `hudplus.hud_get(<player (userdata or string)>, <hud name (string)>, 
 
 Allows retrieving information about an HUD (including the original definition). The third parameter allows you to specify which piece of information you want to get (e.g. `def`). If the third parameter is `nil` or invalid, the entire table containing all the information about the HUD will be returned.
 
+#### `hud_set`
+__Usage:__ `hudplus.hud_set(<player (userdata or string)>, <hud name (string)>, <key to set (string)>, <value>)`
+
+Sets a piece of information for an HUD in the HUDs table where HUD Plus keeps track of registered HUDs. __Note:__ the final `value` parameter can be of any type (e.g. string, table, or boolean).
+
 #### `hud_add`
 __Usage:__ `hudplus.hud_add(<player (userdata or string)>, <hud name (string)>, <definition (table)>)`
 
