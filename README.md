@@ -1,4 +1,4 @@
-![Screenshot](screenshot.png)
+![Screenshot](.gh-screenshot.png)
 
 HUD Plus [hudplus]
 ====================
