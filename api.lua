@@ -1,11 +1,11 @@
--- hudplus/api.lua
+-- hudlib/api.lua
 
 local huds  = {}
 local queue = {}
 local times = {}
 
 -- [function] After
-function hudplus.after(name, time, func)
+function hudlib.after(name, time, func)
   queue[name] = { time = time, func = func, }
 
   -- Update times table
@@ -15,7 +15,7 @@ function hudplus.after(name, time, func)
 end
 
 -- [function] Destroy after
-function hudplus.after_remove(name)
+function hudlib.after_remove(name)
   if queue[name] then
   	queue[name] = nil
   	return true
@@ -33,7 +33,7 @@ minetest.register_globalstep(function(dtime)
 		times[_] = times[_] + dtime
 		if times[_] >= i.time then
 			i.func()
-			hudplus.after_remove(_)
+			hudlib.after_remove(_)
 			times[_] = nil
 		end
   end
@@ -49,8 +49,8 @@ minetest.register_globalstep(function(dtime)
 end)
 
 -- [function] Get HUD
-function hudplus.hud_get(name, hud_name, key)
-  assert(name and hud_name, "hudplus.hud_get: Invalid parameters")
+function hudlib.hud_get(name, hud_name, key)
+  assert(name and hud_name, "hudlib.hud_get: Invalid parameters")
   if type(name) == "userdata" then
     name = name:get_player_name()
   end
@@ -70,8 +70,8 @@ function hudplus.hud_get(name, hud_name, key)
 end
 
 -- [function] Set HUD Value
-function hudplus.hud_set(name, hud_name, key, value)
-  assert(name and hud_name and key, "hudplus.hud_set: Invalid parameters")
+function hudlib.hud_set(name, hud_name, key, value)
+  assert(name and hud_name and key, "hudlib.hud_set: Invalid parameters")
   if type(name) == "userdata" then
     name = name:get_player_name()
   end
@@ -87,8 +87,8 @@ function hudplus.hud_set(name, hud_name, key, value)
 end
 
 -- [function] Add HUD
-function hudplus.hud_add(player, hud_name, def)
-  assert(player and hud_name and def, "hudplus.hud_add: Invalid parameters")
+function hudlib.hud_add(player, hud_name, def)
+  assert(player and hud_name and def, "hudlib.hud_add: Invalid parameters")
   if type(player) == "string" then
     player = minetest.get_player_by_name(player)
   end
@@ -120,8 +120,8 @@ function hudplus.hud_add(player, hud_name, def)
       }
 
       if def.hide_after then
-        hudplus.after("hide_"..hud_name, def.hide_after, function()
-          hudplus.hud_hide(player, hud_name)
+        hudlib.after("hide_"..hud_name, def.hide_after, function()
+          hudlib.hud_hide(player, hud_name)
 
           if def.on_hide then
             def.on_hide()
@@ -135,14 +135,14 @@ function hudplus.hud_add(player, hud_name, def)
 end
 
 -- [function] Remove HUD
-function hudplus.hud_remove(player, hud_name)
-  assert(player and hud_name, "hudplus.hud_remove: Invalid parameters")
+function hudlib.hud_remove(player, hud_name)
+  assert(player and hud_name, "hudlib.hud_remove: Invalid parameters")
   if type(player) == "string" then
     player = minetest.get_player_by_name(player)
   end
 
   local name = player:get_player_name()
-  local hud  = hudplus.hud_get(name, hud_name)
+  local hud  = hudlib.hud_get(name, hud_name)
   if hud then
     player:hud_remove(hud.id)
     return true
@@ -150,8 +150,8 @@ function hudplus.hud_remove(player, hud_name)
 end
 
 -- [function] Change HUD
-function hudplus.hud_change(player, hud_name, key, val)
-  assert(player and hud_name and key, "hudplus.hud_change: Invalid parameters")
+function hudlib.hud_change(player, hud_name, key, val)
+  assert(player and hud_name and key, "hudlib.hud_change: Invalid parameters")
   if type(player) == "string" then
     player = minetest.get_player_by_name(player)
   end
@@ -160,30 +160,30 @@ function hudplus.hud_change(player, hud_name, key, val)
   if key == "pos"  then key = "position" end
 
   local name = player:get_player_name()
-  local hud  = hudplus.hud_get(name, hud_name)
+  local hud  = hudlib.hud_get(name, hud_name)
   if hud then
     player:hud_change(hud.id, key, val)
 
     -- Update def in hud list
     hud.def[key] = val
-    hudplus.hud_set(player, hud_name, "def", hud.def)
+    hudlib.hud_set(player, hud_name, "def", hud.def)
     return true
   end
 end
 
 -- [function] Hide HUD
-function hudplus.hud_hide(player, hud_name)
-  assert(player and hud_name, "hudplus.hud_hide: Invalid parameters")
+function hudlib.hud_hide(player, hud_name)
+  assert(player and hud_name, "hudlib.hud_hide: Invalid parameters")
   if type(player) == "string" then
     player = minetest.get_player_by_name(player)
   end
 
   local name = player:get_player_name()
-  local hud  = hudplus.hud_get(name, hud_name)
+  local hud  = hudlib.hud_get(name, hud_name)
   if hud then
     if hud.show == true then
       player:hud_remove(hud.id)
-      hudplus.hud_set(player, hud_name, "show", false)
+      hudlib.hud_set(player, hud_name, "show", false)
 
       local def = hud.def
       if def.on_hide then
@@ -196,23 +196,23 @@ function hudplus.hud_hide(player, hud_name)
 end
 
 -- [function] Show HUD
-function hudplus.hud_show(player, hud_name)
-  assert(player and hud_name, "hudplus.hud_hide: Invalid parameters")
+function hudlib.hud_show(player, hud_name)
+  assert(player and hud_name, "hudlib.hud_hide: Invalid parameters")
   if type(player) == "string" then
     player = minetest.get_player_by_name(player)
   end
 
   local name = player:get_player_name()
-  local hud  = hudplus.hud_get(name, hud_name)
+  local hud  = hudlib.hud_get(name, hud_name)
   if hud then
     if hud.show == false then
-      hudplus.hud_set(player, hud_name, "id", player:hud_add(hud.def))
-      hudplus.hud_set(player, hud_name, "show", true)
+      hudlib.hud_set(player, hud_name, "id", player:hud_add(hud.def))
+      hudlib.hud_set(player, hud_name, "show", true)
 
       local def = hud.def
       if def.hide_after then
-        hudplus.after("hide_"..hud_name, def.hide_after, function()
-          hudplus.hud_hide(player, hud_name)
+        hudlib.after("hide_"..hud_name, def.hide_after, function()
+          hudlib.hud_hide(player, hud_name)
 
           if def.on_hide then
             def.on_hide()
@@ -230,11 +230,11 @@ function hudplus.hud_show(player, hud_name)
 end
 
 -- [function] Register HUD
-function hudplus.register(hud_name, def)
+function hudlib.register(hud_name, def)
   local when = def.show_on or "join"
   if when == "join" then
     minetest.register_on_joinplayer(function(player)
-      hudplus.hud_add(player, hud_name, def)
+      hudlib.hud_add(player, hud_name, def)
 
       if def.on_add then
         def.on_add(player)
@@ -242,7 +242,7 @@ function hudplus.register(hud_name, def)
     end)
   elseif when == "now" then
     for _, player in pairs(minetest.get_connected_players()) do
-      if hudplus.hud_add(player, hud_name, def) then
+      if hudlib.hud_add(player, hud_name, def) then
         if def.on_add then
           def.on_add(player)
         end
@@ -252,8 +252,8 @@ function hudplus.register(hud_name, def)
 end
 
 -- [function] Unregister HUD
-function hudplus.unregister(hud_name)
+function hudlib.unregister(hud_name)
   for player, huds in pairs(huds) do
-    hudplus.hud_remove(minetest.get_player_by_name(player), hud_name)
+    hudlib.hud_remove(minetest.get_player_by_name(player), hud_name)
   end
 end

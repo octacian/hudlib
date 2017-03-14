@@ -1,28 +1,28 @@
--- hudplus/init.lua
+-- hudlib/init.lua
 
-hudplus = {}
+hudlib = {}
 
-hudplus.VERSION = 0.1
-hudplus.RELEASE = "alpha"
+hudlib.VERSION = 0.1
+hudlib.RELEASE = "alpha"
 
-local modpath = minetest.get_modpath("hudplus")
+local modpath = minetest.get_modpath("hudlib")
 
 -- [function] Log
-function hudplus.log(content, log_type)
+function hudlib.log(content, log_type)
   if not content then return false end
   if log_type == nil then log_type = "action" end
-  minetest.log(log_type, "[HUD Plus] "..content)
+  minetest.log(log_type, "[HUD Library] "..content)
 end
 
 ---------------------
 ---- CHATCOMMAND ----
 ---------------------
 
--- [register cmd] /hudplus
-minetest.register_chatcommand("hudplus", {
-  description = "Manage HUD Plus",
+-- [register cmd] /hudlib
+minetest.register_chatcommand("hudlib", {
+  description = "Check HUD Library version",
   func = function(name)
-    return true, "HUD Plus: Version "..tostring(hudplus.VERSION).." ("..hudplus.RELEASE..")"
+    return true, "HUD Library: Version "..tostring(hudlib.VERSION).." ("..hudlib.RELEASE..")"
   end,
 })
 

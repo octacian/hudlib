@@ -12,5 +12,4 @@ Planned
 - API to register HUDs displayed to all players
 - Statbar API
 
-Forum: https://forum.minetest.net/viewtopic.php?f=9&t=16864&p=257211#p257211
-GitHub: https://github.com/octacian/hudplus
+GitHub: https://github.com/octacian/hudlib
