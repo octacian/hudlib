@@ -3,6 +3,7 @@
 local huds  = {}
 local queue = {}
 local times = {}
+local every = {}
 
 -- [function] After
 function hudlib.after(name, time, func)
@@ -24,6 +25,7 @@ end
 
 -- [register] Globalstep
 minetest.register_globalstep(function(dtime)
+
   -- Queue
   for _, i in pairs(queue) do
   	if not times[_] then
@@ -38,11 +40,39 @@ minetest.register_globalstep(function(dtime)
 		end
   end
 
-  -- on_step Callback
+  -- [for] Every player in HUD list
   for player, huds in pairs(huds) do
+    local pname = minetest.get_player_by_name(player)
+
+    -- [for] Every HUD attached to player
     for _, hud in pairs(huds) do
+      -- on_step Callback
       if hud.on_step then
-        hud.on_step(minetest.get_player_by_name(player), dtime)
+        hud.on_step(pname, dtime)
+      end
+
+      -- do_every Callback
+      if hud.do_every and hud.do_every.time and hud.do_every.func then
+        if not every[_] then
+      		every[_] = 1
+      	end
+
+        local time = hud.do_every.time
+        if time == "second" then
+          time = 1
+        elseif time == "minute" then
+          time = 60
+        elseif time == "5m" then
+          time = 300
+        elseif time == "10m" then
+          time = 600
+        else
+          time = tonumber(time)
+        end
+
+        if time and every[_] >= time then
+          hud.do_every.func(pname)
+        end
       end
     end
   end
@@ -125,21 +155,26 @@ function hudlib.hud_add(player, hud_name, def)
     def.hud_elem_type = def.type or def.hud_elem_type
     def.position      = def.pos or def.position
 
+    local on_step  = def.on_step
+    def.on_step    = nil
+    local do_every = def.do_every
+    def.do_every   = nil
+
     if def.show == false then
       huds[name][hud_name] = {
-        def  = def,
-        show = false,
+        def      = def,
+        show     = false,
+        on_step  = on_step,
+        do_every = do_every,
       }
     else
-      local on_step = def.on_step
-      def.on_step = nil
-
       local id = player:hud_add(def)
       huds[name][hud_name] = {
-        id      = id,
-        def     = def,
-        show    = true,
-        on_step = on_step,
+        id       = id,
+        def      = def,
+        show     = true,
+        on_step  = on_step,
+        do_every = do_every,
       }
 
       if def.hide_after then
