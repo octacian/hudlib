@@ -23,18 +23,7 @@ minetest.register_globalstep(function(dtime)
       		every[_] = 1
       	end
 
-        local time = hud.do_every.time
-        if time == "second" then
-          time = 1
-        elseif time == "minute" then
-          time = 60
-        elseif time == "5m" then
-          time = 300
-        elseif time == "10m" then
-          time = 600
-        else
-          time = tonumber(time)
-        end
+        local time = hudlib.parse_time(hud.do_every.time)
 
         if time and every[_] >= time then
           hud.do_every.func(pname)

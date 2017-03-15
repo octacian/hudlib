@@ -11,6 +11,16 @@ __Usage:__ `hudlib.after_remove(<name (string)>)`
 
 Remove an after call from the queue so that it will not be called when its time is up. After calls using HUD Library' after function are queued by name. See `after` for more information.
 
+#### `parse_time`
+__Usage:__ `hudlib.parse_time(<time (string)>)`
+
+Parses a string containing sets separated by spaces, each containing any amount of numbers and one alpha-numeric character. You can have as many sets as you want, each one representing either a second, minute, or hour. If no alpha-numeric character follows a set or it is followed by `s`, it is intepreted as seconds. If `m` follows a set, it is intepreted as minutes, while `h` is intepreted as hours. If an integer is provided to `parse_time`, it will simply be returned without undergoing any processing. See below for example.
+
+```lua
+hudlib.parse_time("10m 1h 23s 5")
+-- ^ returns 4228 seconds
+```
+
 #### `list`
 __Usage:__ `hudlib.list(<player (userdata or string)>)`
 

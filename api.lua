@@ -38,6 +38,36 @@ minetest.register_globalstep(function(dtime)
   end
 end)
 
+-- [function] Parse Time
+function hudlib.parse_time(str)
+  if not str then return end
+
+  if type(str) == "number" then
+    return str
+  end
+
+  str = str:split(" ")
+  if string and #string <= 3 then
+    local time = 0
+
+    for _, t in pairs(str) do
+      local last = t:sub(#t, #t)
+      t2 = tonumber(t:sub(1, -2))
+      if last == "s" then
+        time = time + t2
+      elseif last == "m" then
+        time = time + t2 * 60
+      elseif last == "h" then
+        time = time + t2 * 60 * 60
+      elseif tonumber(last) then
+        time = time + tonumber(t)
+      end
+    end
+
+    return time
+  end
+end
+
 -- [function] List all HUD elements attached to a player
 function hudlib.list(name)
   assert(name, "hudlib.list: Invalid parameter")
