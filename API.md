@@ -11,6 +11,11 @@ __Usage:__ `hudlib.after_remove(<name (string)>)`
 
 Remove an after call from the queue so that it will not be called when its time is up. After calls using HUD Library' after function are queued by name. See `after` for more information.
 
+#### `hud_list`
+__Usage:__ `hudlib.hud_list(<player (userdata or string)>)`
+
+Lists all the HUDs attached to a player through an HUDLib API.
+
 #### `hud_get`
 __Usage:__ `hudlib.hud_get(<player (userdata or string)>, <hud name (string)>, <value to get (string, optional)>`
 

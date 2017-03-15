@@ -48,6 +48,16 @@ minetest.register_globalstep(function(dtime)
   end
 end)
 
+-- [function] List HUDs
+function hudlib.hud_list(name)
+  assert(name, "hudlib.hud_list: Invalid parameter")
+  if type(name) == "userdata" then
+    name = name:get_player_name()
+  end
+
+  return huds[name]
+end
+
 -- [function] Get HUD
 function hudlib.hud_get(name, hud_name, key)
   assert(name and hud_name, "hudlib.hud_get: Invalid parameters")

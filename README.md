@@ -31,9 +31,9 @@ When stacked up against other HUD libraries, HUDLib excels in that it supports a
   - on_step
   - on_show
   - on_hide
+- List all HUDs attached to a player
 
 ### Planned
-- List all HUDs attached to a player
 - Statbar API
 - Waypoint API
 - Custom APIs for each element type
