@@ -26,9 +26,11 @@ minetest.register_chatcommand("hudlib", {
   end,
 })
 
---------------------
--- LOAD RESOURCES --
---------------------
+------------------------
+-- LOAD API RESOURCES --
+------------------------
 
--- Load API
+-- Load Main API
 dofile(modpath.."/api.lua")
+-- Load HUD API
+dofile(modpath.."/hud.lua")

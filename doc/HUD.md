@@ -1,16 +1,6 @@
 # API
 HUD Library introduces several API functions which can be used either in your own mod or when developing an official module. These functions make it easier and quicker to manage HUDs, using names rather than relying on IDs. This also allows for more advanced features like showing and hiding an HUD without actually fully destroying it.
 
-#### `after`
-__Usage:__ `hudlib.after(<name (string)>, <time (integer)>, <func (function)>)`
-
-This is a nearly drop-in replacement for `minetest.after`, except it can be considered to be slightly more advanced. It uses global steps instead, which are also considered more reliable. The most important change, is that things queued with `after` are placed in a queue table under the name specified. This means that if `after` is called specifying the same name, the time will be updated and the counter reset preventing HUDs and other things from disappearing too quickly in the case of `minetest.after` where calls would get stacked up.
-
-#### `after_remove`
-__Usage:__ `hudlib.after_remove(<name (string)>)`
-
-Remove an after call from the queue so that it will not be called when its time is up. After calls using HUD Library' after function are queued by name. See `after` for more information.
-
 #### `hud_list`
 __Usage:__ `hudlib.hud_list(<player (userdata or string)>)`
 

@@ -42,7 +42,7 @@ When stacked up against other HUD libraries, HUDLib excels in that it supports a
 - Auto-repositioning of HUDs to avoid overlap (?)
 
 ### API
-For information on the API available for use by other mods (this is the API used by HUD Plus), see [API.md](https://github.com/octacian/hudlib/blob/master/API.md).
+For information on the API available for use by other mods (this is the API used by HUD Plus), see the [documentation](https://github.com/octacian/hudlib/blob/master/doc).
 
 ### Download
 [Master](https://github.com/octacian/hudlib/archive/master.zip) (latest, often unstable)<br>
