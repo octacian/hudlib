@@ -3,6 +3,7 @@
 hudlib.huds = {}
 local huds  = hudlib.huds
 local every = {}
+local efor  = {}
 
 -- [register] Globalstep
 minetest.register_globalstep(function(dtime)
@@ -19,12 +20,25 @@ minetest.register_globalstep(function(dtime)
 
       -- do_every Callback
       if hud.do_every and hud.do_every.time and hud.do_every.func then
+        local over_time = hudlib.parse_time(hud.do_every.stop)
+        if over_time then
+          if not efor[_] then
+        		efor[_] = 1
+        	end
+
+          efor[_] = efor[_] + dtime
+          if efor[_] >= over_time then
+            return
+          end
+        end
+
         if not every[_] then
       		every[_] = 1
       	end
 
         local time = hudlib.parse_time(hud.do_every.time)
 
+        every[_] = every[_] + dtime
         if time and every[_] >= time then
           hud.do_every.func(pname)
         end

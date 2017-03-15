@@ -24,7 +24,7 @@ Sets a piece of information for an HUD in the HUDs table where HUD Library keeps
 #### `hud_add`
 __Usage:__ `hudlib.hud_add(<player (userdata or string)>, <hud name (string)>, <definition (table)>)`
 
-Adds an HUD to the player. The HUD name should be a unique string (e.g. `game_time`), but typically not an ID as is used by `player:hud_add`. The definition accepts the same parameters as `player:hud_add`, however, `hud_elem_type` can be shortened to `type` and `position` can be shortened to `pos`. An HUD can be hidden by default by setting the `show` attribute to `false` (can be shown with `hud_show`). An HUD can be set to automatically hide itself after a certain number of seconds with `hide_after`. The callback attribute `on_hide` will be called whenever the HUD is hidden, and `on_show` whenever it is shown. `on_step` is called on every globalstep and is provided with the `player` and `dtime`. `do_every` allows you to specify a function to call every so often using to format allowed by `hudlib.parse_time` (API.md). For further information, see the official developer wiki [documentation](http://dev.minetest.net/HUD). __Note:__ if an HUD with the name specified already exists, the new HUD will not be added.
+Adds an HUD to the player. The HUD name should be a unique string (e.g. `game_time`), but typically not an ID as is used by `player:hud_add`. The definition accepts the same parameters as `player:hud_add`, however, `hud_elem_type` can be shortened to `type` and `position` can be shortened to `pos`. An HUD can be hidden by default by setting the `show` attribute to `false` (can be shown with `hud_show`). An HUD can be set to automatically hide itself after a certain number of seconds with `hide_after`. The callback attribute `on_hide` will be called whenever the HUD is hidden, and `on_show` whenever it is shown. `on_step` is called on every globalstep and is provided with the `player` and `dtime`. `do_every` allows you to specify a function to call every so often using to format allowed by `hudlib.parse_time` (API.md). Using this same format, you can also specify when to stop calling `do_every` (see below). For further information, see the official developer wiki [documentation](http://dev.minetest.net/HUD). __Note:__ if an HUD with the name specified already exists, the new HUD will not be added.
 
 __Example:__
 ```lua
@@ -35,8 +35,10 @@ hudlib.hud_add("singleplayer", "testing", {
   number = 0xFFFFFF ,
   text = "Hello World!",
 
-  do_every = { time = "1m 2s 1", func = function(name)
-    --                 ^ Is intrepreted as 1 minute and 3 seconds (see `hudlib.parse_time`)
+  do_every = { time = "1m 2s 1", stop = 10, func = function(name)
+    --                 ^         ^ Stops do_every from being executed after 10 seconds
+    --                 |         | This shows how plain integers can also be used
+    --                 | Is intrepreted as 1 minute and 3 seconds (see `hudlib.parse_time`)
     hudlib.hud_change(name, "testing", "text", "Hello at "..minetest.get_timeofday().."!")
     -- ^ Code to be executed every <time>
   end, }
