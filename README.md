@@ -21,17 +21,18 @@ When stacked up against other HUD libraries, HUDLib excels in that it supports a
 - ...and more!
 
 ### Features
-- `hudlib.after` which uses a named queueing system replaces `minetest.after`
-- HUDs are referenced by a name chosen by the modder
-- Hiding/Showing HUDs without having to redefine the HUD
-- Showing an HUD to all players
-- Removing an HUD from all players
+- `hudlib.after` using a named queueing system to replace `minetest.after`
+- HUDs referenced by a name chosen by the modder
+- Hide/Show HUDs without having to redefine the HUD
+- Show an HUD to all players
+- Remove a specific HUD from all players
 - Auto-hiding HUDs
 - Callbacks in HUD definition
   - on_step
   - on_show
   - on_hide
 - List all HUDs attached to a player
+- Remove all HUDs attached to a player
 
 ### Planned
 - Statbar API

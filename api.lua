@@ -58,6 +58,19 @@ function hudlib.hud_list(name)
   return huds[name]
 end
 
+-- [function] Remove all HUDs
+function hudlib.hud_clear(name)
+  assert(name, "hudlib.hud_list: Invalid parameter")
+  if type(name) == "userdata" then
+    name = name:get_player_name()
+  end
+
+  local huds = hudlib.hud_list(name)
+  for hud, i in pairs(huds) do
+    hudlib.hud_remove(name, hud)
+  end
+end
+
 -- [function] Get HUD
 function hudlib.hud_get(name, hud_name, key)
   assert(name and hud_name, "hudlib.hud_get: Invalid parameters")

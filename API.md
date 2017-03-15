@@ -16,6 +16,11 @@ __Usage:__ `hudlib.hud_list(<player (userdata or string)>)`
 
 Lists all the HUDs attached to a player through an HUDLib API.
 
+#### `hud_clear`
+__Usage:__ `hudlib.hud_clear(<player (userdata or string)>)`
+
+Removes all HUDs from the player specified. __Note:__ default HUDs or HUDs added by other mods cannot be removed by HUDLib.
+
 #### `hud_get`
 __Usage:__ `hudlib.hud_get(<player (userdata or string)>, <hud name (string)>, <value to get (string, optional)>`
 
