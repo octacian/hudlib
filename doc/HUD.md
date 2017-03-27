@@ -24,7 +24,16 @@ Sets a piece of information for an HUD in the HUDs table where HUD Library keeps
 #### `hud_add`
 __Usage:__ `hudlib.hud_add(<player (userdata or string)>, <hud name (string)>, <definition (table)>)`
 
-Adds an HUD to the player. The HUD name should be a unique string (e.g. `game_time`), but typically not an ID as is used by `player:hud_add`. The definition accepts the same parameters as `player:hud_add`, however, `hud_elem_type` can be shortened to `type` and `position` can be shortened to `pos`. An HUD can be hidden by default by setting the `show` attribute to `false` (can be shown with `hud_show`). An HUD can be set to automatically hide itself after a certain number of seconds with `hide_after`. The callback attribute `on_hide` will be called whenever the HUD is hidden, and `on_show` whenever it is shown. `on_step` is called on every globalstep and is provided with the `player` and `dtime`. `do_every` allows you to specify a function to call every so often using to format allowed by `hudlib.parse_time` (API.md). Using this same format, you can also specify when to stop calling `do_every` (see below). For further information, see the official developer wiki [documentation](http://dev.minetest.net/HUD). __Note:__ if an HUD with the name specified already exists, the new HUD will not be added.
+Adds an HUD to the player. The HUD name should be a unique string (e.g. `game_time`), but typically not an ID as is used by `player:hud_add`. The definition accepts the same parameters as `player:hud_add`, however, `hud_elem_type` can be shortened to `type` and `position` can be shortened to `pos`. An HUD can be hidden by default by setting the `show` attribute to `false` (can be shown with `hud_show`). An HUD can be set to automatically hide itself after a certain number of seconds with `hide_after`. HUDs support many callbacks in their definition as show below. For further information about HUDs in general, see the official developer wiki [documentation](http://dev.minetest.net/HUD). __Note:__ if an HUD with the name specified already exists, the new HUD will not be added.
+
+ __Callbacks:__
+ - `on_add(name)` - called when the HUD is first added to the player
+ - `on_remove(name)` - called when the HUD is removed from the player
+ - `on_change(name, key changed)` - called when the HUD is changed
+ - `on_show(name)` - called when the HUD is shown to the player
+ - `on_hide(name)` - called when the HUD is hidden from the player
+ - `on_step(name, dtime)` - called every globalstep
+ - `do_every` - called every time the timer specified runs out (see example below for further explanation)
 
 __Example:__
 ```lua

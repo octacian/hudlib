@@ -14,9 +14,7 @@ minetest.register_globalstep(function(dtime)
     -- [for] Every HUD attached to player
     for _, hud in pairs(huds) do
       -- on_step Callback
-      if hud.on_step then
-        hud.on_step(pname, dtime)
-      end
+      hudlib.event(pname, "step", hud, dtime)
 
       -- do_every Callback
       if hud.do_every and hud.do_every.time and hud.do_every.func then
@@ -124,40 +122,55 @@ function hudlib.hud_add(player, hud_name, def)
     def.hud_elem_type = def.type or def.hud_elem_type
     def.position      = def.pos or def.position
 
-    local on_step  = def.on_step
-    def.on_step    = nil
-    local do_every = def.do_every
-    def.do_every   = nil
+    local on_add    = def.on_add
+    def.on_add      = nil
+    local on_remove = def.on_remove
+    def.on_remove   = nil
+    local on_change = def.on_change
+    def.on_change   = nil
+    local on_show   = def.on_show
+    def.on_show     = nil
+    local on_hide   = def.on_hide
+    def.on_hide     = nil
+    local on_step   = def.on_step
+    def.on_step     = nil
+    local do_every  = def.do_every
+    def.do_every    = nil
+
+    local hud = {
+      def       = def,
+      on_add    = on_add,
+      on_remove = on_remove,
+      on_change = on_change,
+      on_show   = on_show,
+      on_hide   = on_hide,
+      on_step   = on_step,
+      do_every  = do_every,
+    }
 
     if def.show == false then
-      huds[name][hud_name] = {
-        def      = def,
-        show     = false,
-        on_step  = on_step,
-        do_every = do_every,
-      }
+      hud.show = false
+      huds[name][hud_name] = hud
     else
       local id = player:hud_add(def)
-      huds[name][hud_name] = {
-        id       = id,
-        def      = def,
-        show     = true,
-        on_step  = on_step,
-        do_every = do_every,
-      }
+      hud.id   = id
+      hud.show = true
+      huds[name][hud_name] = hud
 
       if def.hide_after then
         hudlib.after("hide_"..hud_name, def.hide_after, function()
           hudlib.hud_hide(player, hud_name)
 
-          if def.on_hide then
-            def.on_hide()
-          end
+          -- Handle event
+          hudlib.event(name, "hide", hud)
         end)
       end
-
-      return true
     end
+
+    -- Handle event
+    hudlib.event(name, "add", huds[name][hud_name])
+
+    return true
   end
 end
 
@@ -172,6 +185,10 @@ function hudlib.hud_remove(player, hud_name)
   local hud  = hudlib.hud_get(name, hud_name)
   if hud then
     player:hud_remove(hud.id)
+
+    -- Handle event
+    hudlib.event(name, "remove", hud)
+
     return true
   end
 end
@@ -194,6 +211,10 @@ function hudlib.hud_change(player, hud_name, key, val)
     -- Update def in hud list
     hud.def[key] = val
     hudlib.hud_set(player, hud_name, "def", hud.def)
+
+    -- Handle event
+    hudlib.event(name, "change", hud, key)
+
     return true
   end
 end
@@ -212,10 +233,8 @@ function hudlib.hud_hide(player, hud_name)
       player:hud_remove(hud.id)
       hudlib.hud_set(player, hud_name, "show", false)
 
-      local def = hud.def
-      if def.on_hide then
-        def.on_hide()
-      end
+      -- Handle event
+      hudlib.event(name, "hide", hud)
 
       return true
     end
@@ -241,15 +260,13 @@ function hudlib.hud_show(player, hud_name)
         hudlib.after("hide_"..hud_name, def.hide_after, function()
           hudlib.hud_hide(player, hud_name)
 
-          if def.on_hide then
-            def.on_hide()
-          end
+          -- Handle event
+          hudlib.event(name, "hide", hud)
         end)
       end
 
-      if def.on_show then
-        def.on_show()
-      end
+      -- Handle event
+      hudlib.event(name, "show", hud)
 
       return true
     end
@@ -263,16 +280,15 @@ function hudlib.register(hud_name, def)
     minetest.register_on_joinplayer(function(player)
       hudlib.hud_add(player, hud_name, def)
 
-      if def.on_add then
-        def.on_add(player)
-      end
+      local name = player:get_player_name()
+      -- Handle event
+      hudlib.event(name, "add", huds[name][hud_name])
     end)
   elseif when == "now" then
     for _, player in pairs(minetest.get_connected_players()) do
       if hudlib.hud_add(player, hud_name, def) then
-        if def.on_add then
-          def.on_add(player)
-        end
+        -- Handle event
+        hudlib.event(name, "add", hud)
       end
     end
   end

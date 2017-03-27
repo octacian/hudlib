@@ -21,6 +21,20 @@ hudlib.parse_time("10m 1h 23s 5")
 -- ^ returns 4228 seconds
 ```
 
+#### `event`
+__Usage:__ `hudlib.event(<player (userdata or string)>, <event name (string)>, <hud (table)>, ...)`
+
+This is used for easier handling of events. It accepts a player name to be provided to the event function, the name of the event, a table containing the entire HUD entry, and a variable number of other parameters to be provided to the event function.
+
+__Valid Events:__
+- `add`
+- `remove`
+- `change`
+- `show`
+- `hide`
+- `step`
+- `every`
+
 #### `list`
 __Usage:__ `hudlib.list(<player (userdata or string)>)`
 

@@ -68,6 +68,45 @@ function hudlib.parse_time(str)
   end
 end
 
+-- [function] Handle Event
+function hudlib.event(name, e, hud, ...)
+  if type(name) == "userdata" then
+    name = name:get_player_name()
+  end
+
+  if hud then
+    if e == "add" then
+      if hud.on_add then
+        hud.on_add(name, ...)
+      end
+    elseif e == "remove" then
+      if hud.on_remove then
+        hud.on_remove(name, ...)
+      end
+    elseif e == "change" then
+      if hud.on_change then
+        hud.on_change(name, ...)
+      end
+    elseif e == "show" then
+      if hud.on_show then
+        hud.on_show(name, ...)
+      end
+    elseif e == "hide" then
+      if hud.on_hide then
+        hud.on_hide(name, ...)
+      end
+    elseif e == "step" then
+      if hud.on_step then
+        hud.on_step(name, ...)
+      end
+    elseif e == "every" then
+      if hud.do_every.func then
+        hud.do_every.func(name, ...)
+      end
+    end
+  end
+end
+
 -- [function] List all HUD elements attached to a player
 function hudlib.list(name)
   assert(name, "hudlib.list: Invalid parameter")
