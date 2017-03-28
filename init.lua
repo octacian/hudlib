@@ -34,3 +34,6 @@ minetest.register_chatcommand("hudlib", {
 dofile(modpath.."/api.lua")
 -- Load HUD API
 dofile(modpath.."/hud.lua")
+
+-- Load Image API
+dofile(modpath.."/image.lua")
