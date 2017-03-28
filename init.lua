@@ -37,3 +37,5 @@ dofile(modpath.."/hud.lua")
 
 -- Load Image API
 dofile(modpath.."/image.lua")
+-- Load Text API
+dofile(modpath.."/text.lua")
