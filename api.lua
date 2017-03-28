@@ -106,26 +106,3 @@ function hudlib.event(name, e, hud, ...)
     end
   end
 end
-
--- [function] List all HUD elements attached to a player
-function hudlib.list(name)
-  assert(name, "hudlib.list: Invalid parameter")
-  if type(name) == "userdata" then
-    name = name:get_player_name()
-  end
-
-  return hudlib.huds[name]
-end
-
--- [function] Remove all HUD elements attached to a player
-function hudlib.clear(name)
-  assert(name, "hudlib.clear: Invalid parameter")
-  if type(name) == "userdata" then
-    name = name:get_player_name()
-  end
-
-  local huds = hudlib.list(name)
-  for hud, i in pairs(huds) do
-    hudlib.hud_remove(name, hud)
-  end
-end
