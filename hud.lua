@@ -135,8 +135,11 @@ function hudlib.add(player, hud_name, def)
     def.on_step     = nil
     local do_every  = def.do_every
     def.do_every    = nil
+    local events    = def.events
+    def.events      = nil
 
     local hud = {
+      name      = hud_name,
       def       = def,
       on_add    = on_add,
       on_remove = on_remove,
@@ -162,6 +165,23 @@ function hudlib.add(player, hud_name, def)
 
           -- Handle event
           hudlib.event(name, "hide", hud)
+        end)
+      end
+
+      -- Register other events
+      if events then
+        minetest.register_playerevent(function(player, event)
+          if player:get_player_name() == name then
+            -- Health
+            if events.damage and event == "health_changed" then
+              events.damage(hud.self, player)
+            end
+
+            -- Breath
+            if events.breath and event == "breath_changed" then
+              events.breath(hud.self, player)
+            end
+          end
         end)
       end
     end
