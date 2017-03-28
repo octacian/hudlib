@@ -41,3 +41,5 @@ dofile(modpath.."/image.lua")
 dofile(modpath.."/text.lua")
 -- Load Inventory API
 dofile(modpath.."/inventory.lua")
+-- Load Waypoint API
+dofile(modpath.."/waypoint.lua")
