@@ -174,12 +174,12 @@ function hudlib.add(player, hud_name, def)
           if player:get_player_name() == name then
             -- Health
             if events.damage and event == "health_changed" then
-              events.damage(hud.self, player)
+              events.damage(player)
             end
 
             -- Breath
             if events.breath and event == "breath_changed" then
-              events.breath(hud.self, player)
+              events.breath(player)
             end
           end
         end)
