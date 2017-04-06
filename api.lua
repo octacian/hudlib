@@ -21,6 +21,27 @@ function hudlib.after_remove(name)
   end
 end
 
+local recur       = {}
+local recur_times = {}
+
+-- [function] Register recurring
+function hudlib.recur(name, every, func, endt)
+  recur[name] = { every = every, stop_after = endt, func = func, }
+
+  -- Update recur times table
+  if recur_times[name] then
+    recur_times[name] = { time = 0, num = 0, }
+  end
+end
+
+-- [function] Stop recurring
+function hudlib.recur_stop(name)
+  if recur[name] then
+    recur[name] = nil
+    return true
+  end
+end
+
 -- [register] Globalstep
 minetest.register_globalstep(function(dtime)
   -- Queue
@@ -35,6 +56,24 @@ minetest.register_globalstep(function(dtime)
 			hudlib.after_remove(_)
 			times[_] = nil
 		end
+  end
+
+  -- Recurring
+  for _, i in pairs(recur) do
+    if not recur_times[_] then
+      recur_times[_] = { time = 1, num = 0, }
+    end
+
+    recur_times[_].time = recur_times[_].time + dtime
+    if recur_times[_].time >= i.every then
+      i.func()
+      recur_times[_].time = 0
+      recur_times[_].num  = recur_times[_].num + 1
+
+      if i.stop_after and recur_times[_].num > i.stop_after then
+        hudlib.recur_stop(_)
+      end
+    end
   end
 end)
 

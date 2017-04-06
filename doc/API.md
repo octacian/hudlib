@@ -11,6 +11,16 @@ __Usage:__ `hudlib.after_remove(<name (string)>)`
 
 Remove an after call from the queue so that it will not be called when its time is up. After calls using HUD Library' after function are queued by name. See `after` for more information.
 
+#### `recur`
+__Usage:__ `hudlib.recur(<name (string)>, <every (integer)>, <func (function)>, <stop after (integer, optional)>)`
+
+Allows the registration of an event to be executed every nth second (defined by second parameter, `every`). The final parameter allows specifying that the recurring event is removed after a number of iterations.
+
+#### `recur_stop`
+__Usage:__ `hudlib.recur_stop(<name (string)>)`
+
+Remove a recurring event to prevent it from being called anymore. When the stop after parameter (final parameter) is provided to the registration function, this will automatically be called after the recurring event executes the specified number of times.
+
 #### `parse_time`
 __Usage:__ `hudlib.parse_time(<time (string)>)`
 
