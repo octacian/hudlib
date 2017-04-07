@@ -1,33 +1,37 @@
 -- hudlib/image.lua
 
+local metatable = {
+  remove = function(self)
+    hudlib.remove(self.player_name, self.name)
+  end,
+  hide = function(self)
+    hudlib.hide(self.player_name, self.name)
+  end,
+  show = function(self)
+    hudlib.show(self.player_name, self.name)
+  end,
+  set_pos = function(self, x, y)
+    hudlib.change(self.player_name, self.name, "position", {x = x, y = y})
+  end,
+  set_scale = function(self, x, y)
+    hudlib.change(self.player_name, self.name, "scale", {x = x, y = y})
+  end,
+  set_image = function(self, image)
+    hudlib.change(self.player_name, self.name, "text", image)
+  end,
+  set_alignment = function(self, x, y)
+    hudlib.change(self.player_name, self.name, "alignment", {x = x or 0, y = y or 0})
+  end,
+  set_offset = function(self, x, y)
+    hudlib.change(self.player_name, self.name, "offset", {x = x, y = y})
+  end,
+}
+
 -- [local function] Generate methods
 local function gen(name, hud_name)
-  return {
-    remove = function()
-      hudlib.remove(name, hud_name)
-    end,
-    hide = function()
-      hudlib.hide(name, hud_name)
-    end,
-    show = function()
-      hudlib.show(name, hud_name)
-    end,
-    set_pos = function(x, y)
-      hudlib.change(name, hud_name, "position", {x = x, y = y})
-    end,
-    set_scale = function(x, y)
-      hudlib.change(name, hud_name, "scale", {x = x, y = y})
-    end,
-    set_image = function(image)
-      hudlib.change(name, hud_name, "text", image)
-    end,
-    set_alignment = function(x, y)
-      hudlib.change(name, hud_name, "alignment", {x = x or 0, y = y or 0})
-    end,
-    set_offset = function(x, y)
-      hudlib.change(name, hud_name, "offset", {x = x, y = y})
-    end,
-  }
+  return setmetatable({
+    player_name = name, name = hud_name, def = hudlib.get(name, hud_name, "def")
+  }, {__index = metatable})
 end
 
 -- [function] List images

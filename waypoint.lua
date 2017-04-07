@@ -1,37 +1,38 @@
 -- hudlib/waypoint.lua
 
+local metatable = {
+  remove = function(self)
+    hudlib.remove(self.player_name, self.name)
+  end,
+  hide = function(self)
+    hudlib.hide(self.player_name, self.name)
+  end,
+  show = function(self)
+    hudlib.show(self.player_name, self.name)
+  end,
+  set_name = function(self, str)
+    hudlib.change(self.player_name, self.name, "name", str)
+  end,
+  set_suffix = function(self, str)
+    hudlib.change(self.player_name, self.name, "text", str)
+  end,
+  set_colour = function(self, colour)
+    hudlib.change(self.player_name, self.name, "number", colour)
+  end,
+  set_pos = function(self, pos)
+    hudlib.change(self.player_name, self.name, "world_pos", pos)
+  end,
+  set_max = function(self, max)
+    hudlib.set(self.player_name, self.name, "max", max)
+  end,
+}
+metatable.color = metatable.colour
+
 -- [local function] Generate methods
 local function gen(name, hud_name)
-  local hud = {
-    remove = function()
-      hudlib.remove(name, hud_name)
-    end,
-    hide = function()
-      hudlib.hide(name, hud_name)
-    end,
-    show = function()
-      hudlib.show(name, hud_name)
-    end,
-    set_name = function(str)
-      hudlib.change(name, hud_name, "name", str)
-    end,
-    set_suffix = function(str)
-      hudlib.change(name, hud_name, "text", str)
-    end,
-    set_colour = function(colour)
-      hudlib.change(name, hud_name, "number", colour)
-    end,
-    set_pos = function(pos)
-      hudlib.change(name, hud_name, "world_pos", pos)
-    end,
-    set_max = function(max)
-      hudlib.set(name, hud_name, "max", max)
-    end,
-  }
-
-  hud.color = hud.colour
-
-  return hud
+  return setmetatable({
+    player_name = name, name = hud_name, def = hudlib.get(name, hud_name, "def")
+  }, {__index = metatable})
 end
 
 -- [function] List waypoint elements

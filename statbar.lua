@@ -1,71 +1,68 @@
 -- hudlib/statbar.lua
 
-local hud_health = true
-local hud_breath = true
+local metatable = {
+  remove = function(self)
+    hudlib.remove(self.player_name, self.name)
+  end,
+  hide = function(self)
+    hudlib.hide(self.player_name, self.name)
+  end,
+  show = function(self)
+    hudlib.show(self.player_name, self.name)
+  end,
+  set_pos = function(self, x, y)
+    hudlib.change(self.player_name, self.name, "position", {x = x, y = y})
+  end,
+  set_texture = function(self, texture)
+    hudlib.change(self.player_name, self.name, "text", texture)
+  end,
+  set_dir = function(self, dir)
+    hudlib.change(self.player_name, self.name, "direction", dir)
+  end,
+  set_offset = function(self, x, y)
+    hudlib.change(self.player_name, self.name, "offset", {x = x, y = y})
+  end,
+  set_size = function(self, x, y)
+    hudlib.change(self.player_name, self.name, "size", {x = x, y = y})
+  end,
+
+  set_min = function(self, min)
+    hudlib.set(self.player_name, self.name, "min", min)
+
+    if self.def.number < min then
+      hudlib.change(self.player_name, self.name, "number", min)
+    end
+  end,
+  set_max = function(self, max)
+    hudlib.set(self.player_name, self.name, "max", max)
+
+    if self.def.number > max then
+      hudlib.change(self.player_name, self.name, "number", max)
+    end
+  end,
+  set_status = function(self, num)
+    local def = self.def
+
+    if num < def.min then
+      hudlib.change(self.player_name, self.name, "number", def.min)
+    elseif num > def.max then
+      hudlib.change(self.player_name, self.name, "number", def.max)
+    else
+      hudlib.change(self.player_name, self.name, "number", num)
+    end
+  end,
+
+  get_status = function(self)
+    return self.def.number or 0
+  end,
+}
+metatable.color = metatable.colour
 
 -- [local function] Generate methods
 local function gen(name, hud_name)
-  local hud = {
-    remove = function()
-      hudlib.remove(name, hud_name)
-    end,
-    hide = function()
-      hudlib.hide(name, hud_name)
-    end,
-    show = function()
-      hudlib.show(name, hud_name)
-    end,
-    set_pos = function(x, y)
-      hudlib.change(name, hud_name, "position", {x = x, y = y})
-    end,
-    set_texture = function(texture)
-      hudlib.change(name, hud_name, "text", texture)
-    end,
-    set_dir = function(dir)
-      hudlib.change(name, hud_name, "direction", dir)
-    end,
-    set_offset = function(x, y)
-      hudlib.change(name, hud_name, "offset", {x = x, y = y})
-    end,
-    set_size = function(x, y)
-      hudlib.change(name, hud_name, "size", {x = x, y = y})
-    end,
-
-    set_min = function(min)
-      hudlib.set(name, hud_name, "min", min)
-
-      if hudlib.get(name, hud_name, "def").number < min then
-        hudlib.change(name, hud_name, "number", min)
-      end
-    end,
-    set_max = function(max)
-      hudlib.set(name, hud_name, "max", max)
-
-      if hudlib.get(name, hud_name, "def").number > max then
-        hudlib.change(name, hud_name, "number", max)
-      end
-    end,
-    set_status = function(num)
-      local def = hudlib.get(name, hud_name, "def")
-
-      if num < def.min then
-        hudlib.change(name, hud_name, "number", def.min)
-      elseif num > def.max then
-        hudlib.change(name, hud_name, "number", def.max)
-      else
-        hudlib.change(name, hud_name, "number", num)
-      end
-    end,
-
-    get_status = function()
-      local def = hudlib.get(name, hud_name, "def")
-      return def.number or 0
-    end
-  }
-
-  hud.color = hud.colour
-
-  return hud
+  return setmetatable({
+    player_name = name, name = hud_name, def = hudlib.get(name, hud_name, "def")
+  }, {__index = metatable})
 end
 
 -- [function] List statbar elements

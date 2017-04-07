@@ -1,7 +1,7 @@
 # Statbars
 The API for statbar HUD elements is based off of the main API, however, it makes things even easier when it comes to manipulating the statbar HUDs. The main reason why this sub-API makes things easier, is that it presents a table for each statbar element, suited with several functions to manipulate it without requiring that the identification of the element be provided each time you make a change.
 
-#### `liststatbar`
+#### `list_statbar`
 __Usage:__ `hudlib.list_statbar(<player (userdata or string)>)`
 
 Lists all statbar elements attached to a player.
@@ -9,7 +9,7 @@ Lists all statbar elements attached to a player.
 #### `get_statbar`
 __Usage:__ `hudlib.get_statbar(<player (userdata or string)>, <hud name (string)>)`
 
-Returns a table containing all of the helpers which allow manipulation of the text element. Helpers can be called in this method: `hudlib.get_statbar(...).remove()` (see below for all available helpers).
+Returns a table containing all of the helpers which allow manipulation of the text element. Helpers can be called in this method: `hudlib.get_statbar(...):remove()` (see below for all available helpers).
 
 __Helpers:__
 - `remove()` - removes the statbar HUD element

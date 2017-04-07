@@ -9,7 +9,7 @@ Lists all image HUDs attached to a player.
 #### `get_image`
 __Usage:__ `hudlib.get_image(<player (userdata or string)>, <hud name (string)>)`
 
-Returns a table containing all of the helpers which allow manipulation of the image. Helpers can be called in this method: `hudlib.get_image(...).remove()` (see below for all available helpers).
+Returns a table containing all of the helpers which allow manipulation of the image. Helpers can be called in this method: `hudlib.get_image(...):remove()` (see below for all available helpers).
 
 __Helpers:__
 - `remove()` - removes the image HUD element

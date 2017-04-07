@@ -1,36 +1,40 @@
 -- hudlib/inventory.lua
 
+local metatable = {
+  remove = function(self)
+    hudlib.remove(self.player_name, self.name)
+  end,
+  hide = function(self)
+    hudlib.hide(self.player_name, self.name)
+  end,
+  show = function(self)
+    hudlib.show(self.player_name, self.name)
+  end,
+  set_pos = function(self, x, y)
+    hudlib.change(self.player_name, self.name, "position", {x = x, y = y})
+  end,
+  set_name = function(self, name)
+    hudlib.change(self.player_name, self.name, "text", name)
+  end,
+  set_number = function(self, num)
+    hudlib.change(self.player_name, self.name, "number", num)
+  end,
+  set_item = function(self, item)
+    hudlib.change(self.player_name, self.name, "item", item)
+  end,
+  set_dir = function(self, dir)
+    hudlib.change(self.player_name, self.name, "direction", dir)
+  end,
+  set_offset = function(self, x, y)
+    hudlib.change(self.player_name, self.name, "offset", {x = x, y = y})
+  end,
+}
+
 -- [local function] Generate methods
 local function gen(name, hud_name)
-  return {
-    remove = function()
-      hudlib.remove(name, hud_name)
-    end,
-    hide = function()
-      hudlib.hide(name, hud_name)
-    end,
-    show = function()
-      hudlib.show(name, hud_name)
-    end,
-    set_pos = function(x, y)
-      hudlib.change(name, hud_name, "position", {x = x, y = y})
-    end,
-    set_name = function(name)
-      hudlib.change(name, hud_name, "text", name)
-    end,
-    set_number = function(num)
-      hudlib.change(name, hud_name, "number", num)
-    end,
-    set_item = function(item)
-      hudlib.change(name, hud_name, "item", item)
-    end,
-    set_dir = function(dir)
-      hudlib.change(name, hud_name, "direction", dir)
-    end,
-    set_offset = function(x, y)
-      hudlib.change(name, hud_name, "offset", {x = x, y = y})
-    end,
-  }
+  return setmetatable({
+    player_name = name, name = hud_name, def = hudlib.get(name, hud_name, "def")
+  }, {__index = metatable})
 end
 
 -- [function] List inventory elements

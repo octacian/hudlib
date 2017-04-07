@@ -9,7 +9,7 @@ Lists all waypoint elements attached to a player.
 #### `get_waypoint`
 __Usage:__ `hudlib.get_waypoint(<player (userdata or string)>, <hud name (string)>)`
 
-Returns a table containing all of the helpers which allow manipulation of the text element. Helpers can be called in this method: `hudlib.get_waypoint(...).remove()` (see below for all available helpers).
+Returns a table containing all of the helpers which allow manipulation of the text element. Helpers can be called in this method: `hudlib.get_waypoint(...):remove()` (see below for all available helpers).
 
 __Helpers:__
 - `remove()` - removes the waypoint HUD element

@@ -9,7 +9,7 @@ Lists all inventory elements attached to a player.
 #### `get_inv`
 __Usage:__ `hudlib.get_inv(<player (userdata or string)>, <hud name (string)>)`
 
-Returns a table containing all of the helpers which allow manipulation of the inventory element. Helpers can be called in this method: `hudlib.get_inv(...).remove()` (see below for all available helpers).
+Returns a table containing all of the helpers which allow manipulation of the inventory element. Helpers can be called in this method: `hudlib.get_inv(...):remove()` (see below for all available helpers).
 
 __Helpers:__
 - `remove()` - removes the inventory HUD element
