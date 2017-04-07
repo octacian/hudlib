@@ -144,6 +144,15 @@ function hudlib.add_statbar(name, hud_name, def)
       end)
     end
 
+    if def.background and def.max then
+      hudlib.add(name, hud_name.."_background", {
+        type = "statbar",
+        parent = hud_name,
+        number = def.max,
+        text = def.background,
+      })
+    end
+
     return gen(name, hud_name)
   end
 end
