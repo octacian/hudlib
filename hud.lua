@@ -296,18 +296,23 @@ end
 
 -- [function] Register HUD
 function hudlib.register(hud_name, def)
+  local function add(player)
+    local type = def.hud_elem_type or def.type
+    hudlib["add_"..type](player, hud_name, def)
+  end
+
   local when = def.show_on or "join"
   if when == "join" then
     minetest.register_on_joinplayer(function(player)
-      hudlib.add(player, hud_name, def)
-
-      local name = player:get_player_name()
-      -- Handle event
-      hudlib.event(name, "add", huds[name][hud_name])
+      if add(player) then
+        local name = player:get_player_name()
+        -- Handle event
+        hudlib.event(name, "add", huds[name][hud_name])
+      end
     end)
   elseif when == "now" then
     for _, player in pairs(minetest.get_connected_players()) do
-      if hudlib.add(player, hud_name, def) then
+      if add(player) then
         -- Handle event
         hudlib.event(name, "add", hud)
       end
