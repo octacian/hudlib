@@ -113,34 +113,36 @@ function hudlib.event(name, e, hud, ...)
     name = name:get_player_name()
   end
 
+  local hself = hudlib["get_"..hud.def.hud_elem_type](name, hud.name)
+
   if hud then
     if e == "add" then
       if hud.on_add then
-        hud.on_add(name, ...)
+        hud.on_add(hself, name, ...)
       end
     elseif e == "remove" then
       if hud.on_remove then
-        hud.on_remove(name, ...)
+        hud.on_remove(hself, name, ...)
       end
     elseif e == "change" then
       if hud.on_change then
-        hud.on_change(name, ...)
+        hud.on_change(hself, name, ...)
       end
     elseif e == "show" then
       if hud.on_show then
-        hud.on_show(name, ...)
+        hud.on_show(hself, name, ...)
       end
     elseif e == "hide" then
       if hud.on_hide then
-        hud.on_hide(name, ...)
+        hud.on_hide(hself, name, ...)
       end
     elseif e == "step" then
       if hud.on_step then
-        hud.on_step(name, ...)
+        hud.on_step(hself, name, ...)
       end
     elseif e == "every" then
       if hud.do_every.func then
-        hud.do_every.func(name, ...)
+        hud.do_every.func(hself, name, ...)
       end
     end
   end

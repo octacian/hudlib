@@ -37,7 +37,7 @@ minetest.register_globalstep(function(dtime)
 
         every[_] = every[_] + dtime
         if time and every[_] >= time then
-          hud.do_every.func(pname)
+          hud.do_every.func(hudlib["get_"..hud.def.hud_elem_type](pname, hud.name), pname)
         end
       end
     end
@@ -172,14 +172,16 @@ function hudlib.add(player, hud_name, def)
       if events then
         minetest.register_playerevent(function(player, event)
           if player:get_player_name() == name then
+            local hself = hudlib["get_"..hud.def.hud_elem_type](name, hud_name)
+
             -- Health
             if events.damage and event == "health_changed" then
-              events.damage(player)
+              events.damage(hself, player)
             end
 
             -- Breath
             if events.breath and event == "breath_changed" then
-              events.breath(player)
+              events.breath(hself, player)
             end
           end
         end)

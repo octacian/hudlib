@@ -26,13 +26,15 @@ __Usage:__ `hudlib.add(<player (userdata or string)>, <hud name (string)>, <defi
 
 Adds an HUD to the player. The HUD name should be a unique string (e.g. `game_time`), but typically not an ID as is used by `player:add`. The definition accepts the same parameters as `player:add`, however, `elem_type` can be shortened to `type` and `position` can be shortened to `pos`. An HUD can be hidden by default by setting the `show` attribute to `false` (can be shown with `show`). An HUD can be set to automatically hide itself after a certain number of seconds with `hide_after`. HUDs support many callbacks in their definition as show below. For further information about HUDs in general, see the official developer wiki [documentation](http://dev.minetest.net/HUD). __Note:__ if an HUD with the name specified already exists, the new HUD will not be added.
 
+One pattern visible below is the fact that a `self` variable is provided to every callback function. Self contains element-specific methods that can be called in the following manner: `self:remove()`. To see more information on the available methods check the documentation for the specific element your are using.
+
  __Callbacks:__
- - `on_add(name)` - called when the HUD is first added to the player
- - `on_remove(name)` - called when the HUD is removed from the player
- - `on_change(name, key changed)` - called when the HUD is changed
- - `on_show(name)` - called when the HUD is shown to the player
- - `on_hide(name)` - called when the HUD is hidden from the player
- - `on_step(name, dtime)` - called every globalstep
+ - `on_add(self, name)` - called when the HUD is first added to the player
+ - `on_remove(self, name)` - called when the HUD is removed from the player
+ - `on_change(self, name, key changed)` - called when the HUD is changed
+ - `on_show(self, name)` - called when the HUD is shown to the player
+ - `on_hide(self, name)` - called when the HUD is hidden from the player
+ - `on_step(self, name, dtime)` - called every globalstep
  - `do_every` - called every time the timer specified runs out (see example below for further explanation)
 
 __Example:__
@@ -44,7 +46,7 @@ hudlib.add("singleplayer", "testing", {
   number = 0xFFFFFF ,
   text = "Hello World!",
 
-  do_every = { time = "1m 2s 1", stop = 10, func = function(name)
+  do_every = { time = "1m 2s 1", stop = 10, func = function(self, name)
     --                 ^         ^ Stops do_every from being executed after 10 seconds
     --                 |         | This shows how plain integers can also be used
     --                 | Is intrepreted as 1 minute and 3 seconds (see `hudlib.parse_time`)
