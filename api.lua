@@ -107,6 +107,92 @@ function hudlib.parse_time(str)
   end
 end
 
+-- [function] Calculate child
+function hudlib.calc_child(name, def)
+  local parent = hudlib.get(name, def.parent)
+
+  if not def.constrain then
+    def.constrain = { location = true, visibility = true, size = true, view = true }
+  end
+
+  -- Set originals
+  def.originals = {
+    position  = def.position,
+    offset    = def.offset,
+  }
+
+  if def.constrain.location then
+    -- Position constraint
+    if def.position then
+      def.position = { x = parent.def.position.x + def.position.x, y = parent.def.position.y + def.position.y }
+    else
+      def.position = parent.def.position
+    end
+
+    -- Offset constraint
+    if def.offset then
+      def.offset = { x = parent.def.offset.x + def.offset.x, y = parent.def.offset.y + def.offset.y }
+    else
+      def.offset = parent.def.offset
+    end
+  end
+
+  if def.constrain.size then
+    def.scale = parent.def.scale or def.scale
+    def.size  = parent.def.size or def.size
+  end
+
+  if def.constrain.view then
+    def.direction = parent.def.direction or def.direction -- Direction constraint
+    def.alignment = parent.def.alignment or def.alignment -- Alignment constraint
+  end
+
+  -- Visibility constraint
+  if def.constrain.visibility then
+    def.show = parent.show or def.show or true
+  end
+
+  -- Return updated definition
+  return def
+end
+
+-- [function] Update child
+function hudlib.update_child(name, def)
+  local parent = hudlib.get(name, def.parent)
+
+  if not def.constrain then
+    def.constrain = { location = true, visibility = true, size = true, view = true }
+  end
+
+  if def.constrain.location then
+    -- Position constraint
+    if def.originals.position then
+      def.position = { x = parent.def.position.x + def.originals.position.x, y = parent.def.position.y + def.originals.position.y }
+    else
+      def.position = parent.def.position
+    end
+
+    -- Offset constraint
+    if def.originals.offset then
+      def.offset = { x = parent.def.offset.x + def.originals.offset.x, y = parent.def.offset.y + def.originals.offset.y }
+    else
+      def.offset = parent.def.offset
+    end
+  end
+
+  if def.constrain.size then
+    def.scale = parent.def.scale or def.scale -- Scale constraint
+    def.size  = parent.def.size or def.size   -- Size constraint
+  end
+
+  if def.constrain.view then
+    def.direction = def.originals.direction or parent.def.direction -- Direction constraint
+    def.alignment = def.originals.alignment or parent.def.alignment -- Alignment constraint
+  end
+
+  return def
+end
+
 -- [function] Handle Event
 function hudlib.event(name, e, hud, ...)
   if type(name) == "userdata" then
@@ -143,6 +229,33 @@ function hudlib.event(name, e, hud, ...)
     elseif e == "every" then
       if hud.do_every.func then
         hud.do_every.func(hself, name, ...)
+      end
+    end
+  end
+
+  -- Update children
+  for _, i in pairs(hud.children) do
+    local child = hudlib.get(name, i)
+    local const = child.constrain
+
+    -- Visibility constraints
+    if const.visibility then
+      if e == "remove" then
+        hudlib.remove(name, i)
+      elseif e == "show" then
+        hudlib.show(name, i)
+      elseif e == "hide" then
+        hudlib.hide(name, i)
+      end
+    end
+
+    -- Change event
+    if e == "change" then
+      local def    = hudlib.get(name, i, "def")
+      local newdef = hudlib.update_child(name, def)
+
+      for k, v in pairs(newdef) do
+        hudlib.change(name, i, k, v)
       end
     end
   end

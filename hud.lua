@@ -138,9 +138,21 @@ function hudlib.add(player, hud_name, def)
     local events    = def.events
     def.events      = nil
 
+    if def.parent and hudlib.get(name, def.parent) then
+      def = hudlib.calc_child(name, def)
+
+      local parent = hudlib.get(name, def.parent)
+      parent.children[#parent.children + 1] = hud_name
+    else
+      assert("hudlib.add: Invalid parent element")
+    end
+
     local hud = {
       name      = hud_name,
       def       = def,
+      parent    = def.parent,
+      constrain = def.constrain,
+      children  = {},
       on_add    = on_add,
       on_remove = on_remove,
       on_change = on_change,
@@ -221,13 +233,20 @@ function hudlib.change(player, hud_name, key, val)
     player = minetest.get_player_by_name(player)
   end
 
+  local allowed = {
+    position = "table", text = "string", offset = "table", size = "number", number = "number",
+    scale = "table", direction = "number", alignment = "number", world_pos = "table",
+  }
+
   if key == "type" then key = "hud_elem_type" end
   if key == "pos"  then key = "position" end
 
   local name = player:get_player_name()
   local hud  = hudlib.get(name, hud_name)
   if hud then
-    player:hud_change(hud.id, key, val)
+    if type(val) == allowed[key] then
+      player:hud_change(hud.id, key, val)
+    end
 
     -- Update def in hud list
     hud.def[key] = val
@@ -273,6 +292,10 @@ function hudlib.show(player, hud_name)
   local hud  = hudlib.get(name, hud_name)
   if hud then
     if hud.show == false then
+      -- Handle event
+      hudlib.event(name, "show", hud)
+
+      -- Add HUD
       hudlib.set(player, hud_name, "id", player:hud_add(hud.def))
       hudlib.set(player, hud_name, "show", true)
 
@@ -285,9 +308,6 @@ function hudlib.show(player, hud_name)
           hudlib.event(name, "hide", hud)
         end)
       end
-
-      -- Handle event
-      hudlib.event(name, "show", hud)
 
       return true
     end

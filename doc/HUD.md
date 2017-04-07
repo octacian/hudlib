@@ -24,7 +24,7 @@ Sets a piece of information for an HUD in the HUDs table where HUD Library keeps
 #### `add`
 __Usage:__ `hudlib.add(<player (userdata or string)>, <hud name (string)>, <definition (table)>)`
 
-Adds an HUD to the player. The HUD name should be a unique string (e.g. `game_time`), but typically not an ID as is used by `player:add`. The definition accepts the same parameters as `player:add`, however, `elem_type` can be shortened to `type` and `position` can be shortened to `pos`. An HUD can be hidden by default by setting the `show` attribute to `false` (can be shown with `show`). An HUD can be set to automatically hide itself after a certain number of seconds with `hide_after`. HUDs support many callbacks in their definition as show below. For further information about HUDs in general, see the official developer wiki [documentation](http://dev.minetest.net/HUD). __Note:__ if an HUD with the name specified already exists, the new HUD will not be added.
+Adds an HUD to the player. The HUD name should be a unique string (e.g. `game_time`), but typically not an ID as is used by `player:add`. The definition accepts the same parameters as `player:add`, however, `elem_type` can be shortened to `type` and `position` can be shortened to `pos`. An HUD can be hidden by default by setting the `show` attribute to `false` (can be shown with `show`). An HUD can be set to automatically hide itself after a certain number of seconds with `hide_after`. HUDs support many callbacks in their definition as show below. Elements also support parent-child constraints allowing the child to be positioned relative to the parent and causing it to automatically change as the parent is updated. A parent-child constraint can be initiated by simply setting the `parent` attribute to the name of the parent element. You can also provide a constrain table (example below) to specify which fields you would like to constrain. For further information about HUDs in general, see the official developer wiki [documentation](http://dev.minetest.net/HUD). __Note:__ if an HUD with the name specified already exists, the new HUD will not be added.
 
 One pattern visible below is the fact that a `self` variable is provided to every callback function. Self contains element-specific methods that can be called in the following manner: `self:remove()`. To see more information on the available methods check the documentation for the specific element your are using.
 
@@ -36,6 +36,16 @@ One pattern visible below is the fact that a `self` variable is provided to ever
  - `on_hide(self, name)` - called when the HUD is hidden from the player
  - `on_step(self, name, dtime)` - called every globalstep
  - `do_every` - called every time the timer specified runs out (see example below for further explanation)
+
+__Constrain Table:__
+```lua
+constrain = {
+  location = true, -- Position relative to parent
+  visibility = true, -- Constrain to parent's visibility (if parent is remove, hidden, or shown, the same is done to the child)
+  size = true, -- Constrain size to parent (not relative)
+  view = true, -- Constrain visual layout (direction, alignment)
+}
+```
 
 __Example:__
 ```lua
