@@ -119,6 +119,7 @@ function hudlib.calc_child(name, def)
   def.originals = {
     position  = def.position,
     offset    = def.offset,
+    show      = def.show,
   }
 
   if def.constrain.location then
@@ -149,7 +150,14 @@ function hudlib.calc_child(name, def)
 
   -- Visibility constraint
   if def.constrain.visibility then
-    def.show = parent.show or def.show or true
+    def.show = parent.show
+
+    if def.show == nil then
+      def.show = def.originals.show
+      if def.show == nil then
+        def.show = true
+      end
+    end
   end
 
   -- Return updated definition
