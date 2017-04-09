@@ -29,23 +29,23 @@ local metatable = {
   set_min = function(self, min)
     hudlib.set(self.player_name, self.name, "min", min)
 
-    if self.def.number < min then
+    if self.def.number and self.def.number < min then
       hudlib.change(self.player_name, self.name, "number", min)
     end
   end,
   set_max = function(self, max)
     hudlib.set(self.player_name, self.name, "max", max)
 
-    if self.def.number > max then
+    if self.def.number and self.def.number > max then
       hudlib.change(self.player_name, self.name, "number", max)
     end
   end,
   set_status = function(self, num)
     local def = self.def
 
-    if num < def.min then
+    if def.min and num < def.min then
       hudlib.change(self.player_name, self.name, "number", def.min)
-    elseif num > def.max then
+    elseif def.max and num > def.max then
       hudlib.change(self.player_name, self.name, "number", def.max)
     else
       hudlib.change(self.player_name, self.name, "number", num)
