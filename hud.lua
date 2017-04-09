@@ -179,25 +179,25 @@ function hudlib.add(player, hud_name, def)
           hudlib.event(name, "hide", hud)
         end)
       end
+    end
 
-      -- Register other events
-      if events then
-        minetest.register_playerevent(function(player, event)
-          if player:get_player_name() == name then
-            local hself = hudlib["get_"..hud.def.hud_elem_type](name, hud_name)
+    -- Register other events
+    if events then
+      minetest.register_playerevent(function(player, event)
+        if player:get_player_name() == name then
+          local hself = hudlib["get_"..hud.def.hud_elem_type](name, hud_name)
 
-            -- Health
-            if events.damage and event == "health_changed" then
-              events.damage(hself, player)
-            end
-
-            -- Breath
-            if events.breath and event == "breath_changed" then
-              events.breath(hself, player)
-            end
+          -- Health
+          if events.damage and event == "health_changed" then
+            events.damage(hself, player)
           end
-        end)
-      end
+
+          -- Breath
+          if events.breath and event == "breath_changed" then
+            events.breath(hself, player)
+          end
+        end
+      end)
     end
 
     -- Handle event
