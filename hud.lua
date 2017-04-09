@@ -243,7 +243,7 @@ function hudlib.change(player, hud_name, key, val)
 
   local name = player:get_player_name()
   local hud  = hudlib.get(name, hud_name)
-  if hud then
+  if hud and hud.id then
     if type(val) == allowed[key] then
       player:hud_change(hud.id, key, val)
     end
