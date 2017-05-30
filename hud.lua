@@ -129,23 +129,6 @@ function hudlib.add(player, hud_name, def)
     def.hud_elem_type = def.type or def.hud_elem_type
     def.position      = def.pos or def.position
 
-    local on_add    = def.on_add
-    def.on_add      = nil
-    local on_remove = def.on_remove
-    def.on_remove   = nil
-    local on_change = def.on_change
-    def.on_change   = nil
-    local on_show   = def.on_show
-    def.on_show     = nil
-    local on_hide   = def.on_hide
-    def.on_hide     = nil
-    local on_step   = def.on_step
-    def.on_step     = nil
-    local do_every  = def.do_every
-    def.do_every    = nil
-    local events    = def.events
-    def.events      = nil
-
     if def.parent and hudlib.get(name, def.parent) then
       def = hudlib.calc_child(name, def)
 
@@ -161,13 +144,13 @@ function hudlib.add(player, hud_name, def)
       parent    = def.parent,
       constrain = def.constrain,
       children  = {},
-      on_add    = on_add,
-      on_remove = on_remove,
-      on_change = on_change,
-      on_show   = on_show,
-      on_hide   = on_hide,
-      on_step   = on_step,
-      do_every  = do_every,
+      on_add    = def.on_add,
+      on_remove = def.on_remove,
+      on_change = def.on_change,
+      on_show   = def.on_show,
+      on_hide   = def.on_hide,
+      on_step   = def.on_step,
+      do_every  = def.do_every,
     }
 
     if def.show == false then
