@@ -44,6 +44,14 @@ minetest.register_globalstep(function(dtime)
   end
 end)
 
+-- [register] On leave player
+minetest.register_on_leaveplayer(function(player)
+	local name = player:get_player_name()
+	if huds[name] then
+		huds[name] = nil
+	end
+end)
+
 -- [function] List all HUD elements attached to a player
 function hudlib.list(name)
   assert(name, "hudlib.list: Invalid parameter")
