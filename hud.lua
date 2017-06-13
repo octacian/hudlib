@@ -172,6 +172,7 @@ function hudlib.add(player, hud_name, def)
       end
     end
 
+		local events = def.events
     -- Register other events
     if events then
       minetest.register_playerevent(function(player, event)
